@@ -55,25 +55,50 @@ header h1 {
 
 footer {
     min-height: 100px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-}
-
-footer .copyright {
+    gap: 12px 24px;
+    border-top: 1px solid #2a2b31;
     font-size: 14px;
-    color: #333;
+    color: var(--color-muted);
+}
+
+.footer a {
+    color: var(--color-muted);
+    transition: color 0.2s;
+}
+
+.footer a:hover {
+    color: var(--color-accent);
+}
+
+.footer__github {
+    font-weight: 700;
+}
+
+.footer__course {
+    display: inline-flex;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--color-muted);
+    transition: box-shadow 0.2s;
+}
+
+.footer__course:hover {
+    box-shadow: 0 0 0 2px var(--color-accent);
+}
+
+.footer__logo {
+    display: block;
+}
+
+.footer__copyright {
+    flex-basis: 100%;
+    margin: 0;
+    font-size: 12px;
     text-align: center;
-}
-
-footer .copyright a {
-    color: #444;
-}
-
-footer .copyright a:hover {
     color: #555;
-}
-
-footer .copyright:before {
-    content: '©';
 }
