@@ -8,6 +8,7 @@ const PLACEHOLDER_IMAGE: string = 'img/news_placeholder.jpg';
 enum NewsMessage {
     Loading = 'Loading news...',
     Empty = 'No news found for this source',
+    Error = 'Failed to load data',
 }
 
 class News {
@@ -52,12 +53,16 @@ class News {
         this.showMessage(NewsMessage.Loading, true);
     }
 
+    public showError(details: string): void {
+        this.showMessage(`${NewsMessage.Error}: ${details}`);
+    }
+
     private getBackgroundImage(imageUrl: string | null): string {
         const placeholder: string = `url("${PLACEHOLDER_IMAGE}")`;
         return imageUrl ? `url("${encodeURI(imageUrl)}"), ${placeholder}` : placeholder;
     }
 
-    private showMessage(text: NewsMessage, withSpinner: boolean = false): void {
+    private showMessage(text: string, withSpinner: boolean = false): void {
         const message: HTMLParagraphElement = document.createElement('p');
         message.className = 'news__message';
         message.textContent = text;

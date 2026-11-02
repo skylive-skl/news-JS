@@ -1,17 +1,18 @@
 import AppLoader from './appLoader';
-import { Callback, Endpoint, IEverythingResponse, ISourcesResponse } from '../../types';
+import { Callback, Endpoint, ErrorCallback, IEverythingResponse, ISourcesResponse } from '../../types';
 
 class AppController extends AppLoader {
-    public getSources(callback: Callback<ISourcesResponse>): void {
+    public getSources(callback: Callback<ISourcesResponse>, onError?: ErrorCallback): void {
         super.getResp<ISourcesResponse>(
             {
                 endpoint: Endpoint.Sources,
             },
-            callback
+            callback,
+            onError
         );
     }
 
-    public getNews(e: MouseEvent, callback: Callback<IEverythingResponse>): void {
+    public getNews(e: MouseEvent, callback: Callback<IEverythingResponse>, onError?: ErrorCallback): void {
         let target: EventTarget | null = e.target;
         const newsContainer: EventTarget | null = e.currentTarget;
 
@@ -29,7 +30,8 @@ class AppController extends AppLoader {
                                 sources: sourceId,
                             },
                         },
-                        callback
+                        callback,
+                        onError
                     );
                 }
                 return;

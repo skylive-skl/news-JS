@@ -25,6 +25,10 @@ export class AppView {
         this.news.showLoading();
     }
 
+    public showError(error: Error): void {
+        this.news.showError(error.message);
+    }
+
     public highlightSource(sourceId: string): void {
         this.sources.setActive(sourceId);
     }

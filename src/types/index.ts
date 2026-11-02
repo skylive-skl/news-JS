@@ -68,3 +68,5 @@ export interface IRequestParams {
 }
 
 export type Callback<T> = (data: T) => void;
+
+export type ErrorCallback = (error: Error) => void;
