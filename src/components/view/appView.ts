@@ -21,6 +21,10 @@ export class AppView {
         this.sources.draw(values);
     }
 
+    public showNewsLoading(): void {
+        this.news.showLoading();
+    }
+
     public highlightSource(sourceId: string): void {
         this.sources.setActive(sourceId);
     }

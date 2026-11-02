@@ -17,10 +17,14 @@ class App {
         const searchInput: HTMLInputElement = getElement(document, '.sources-search', HTMLInputElement);
 
         sourcesContainer.addEventListener('click', (e: MouseEvent): void => {
+            const prevSourceId: string | null = sourcesContainer.getAttribute('data-source');
             this.controller.getNews(e, (data: IEverythingResponse): void => this.view.drawNews(data));
 
             const activeSourceId: string | null = sourcesContainer.getAttribute('data-source');
-            if (activeSourceId) this.view.highlightSource(activeSourceId);
+            if (activeSourceId && activeSourceId !== prevSourceId) {
+                this.view.highlightSource(activeSourceId);
+                this.view.showNewsLoading();
+            }
         });
         searchInput.addEventListener('input', (): void => this.view.filterSources(searchInput.value));
         this.controller.getSources((data: ISourcesResponse): void => this.view.drawSources(data));

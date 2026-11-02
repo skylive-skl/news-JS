@@ -5,8 +5,18 @@ import { getElement } from '../../../utils/getElement';
 const MAX_NEWS_COUNT: number = 10;
 const PLACEHOLDER_IMAGE: string = 'img/news_placeholder.jpg';
 
+enum NewsMessage {
+    Loading = 'Loading news...',
+    Empty = 'No news found for this source',
+}
+
 class News {
     public draw(data: Readonly<IArticle>[]): void {
+        if (!data.length) {
+            this.showMessage(NewsMessage.Empty);
+            return;
+        }
+
         const news: Readonly<IArticle>[] = data.slice(0, MAX_NEWS_COUNT);
 
         const fragment: DocumentFragment = document.createDocumentFragment();
@@ -17,9 +27,9 @@ class News {
 
             if (idx % 2) getElement(newsClone, '.news__item', HTMLElement).classList.add('alt');
 
-            getElement(newsClone, '.news__meta-photo', HTMLElement).style.backgroundImage = `url(${
-                item.urlToImage || PLACEHOLDER_IMAGE
-            })`;
+            getElement(newsClone, '.news__meta-photo', HTMLElement).style.backgroundImage = this.getBackgroundImage(
+                item.urlToImage
+            );
             getElement(newsClone, '.news__meta-author', HTMLElement).textContent = item.author || item.source.name;
             getElement(newsClone, '.news__meta-date', HTMLElement).textContent = item.publishedAt
                 .slice(0, 10)
@@ -35,9 +45,36 @@ class News {
             fragment.append(newsClone);
         });
 
+        this.render(fragment);
+    }
+
+    public showLoading(): void {
+        this.showMessage(NewsMessage.Loading, true);
+    }
+
+    private getBackgroundImage(imageUrl: string | null): string {
+        const placeholder: string = `url("${PLACEHOLDER_IMAGE}")`;
+        return imageUrl ? `url("${encodeURI(imageUrl)}"), ${placeholder}` : placeholder;
+    }
+
+    private showMessage(text: NewsMessage, withSpinner: boolean = false): void {
+        const message: HTMLParagraphElement = document.createElement('p');
+        message.className = 'news__message';
+        message.textContent = text;
+
+        if (withSpinner) {
+            const spinner: HTMLSpanElement = document.createElement('span');
+            spinner.className = 'news__spinner';
+            message.prepend(spinner);
+        }
+
+        this.render(message);
+    }
+
+    private render(content: Node): void {
         const newsContainer: HTMLElement = getElement(document, '.news', HTMLElement);
         newsContainer.innerHTML = '';
-        newsContainer.appendChild(fragment);
+        newsContainer.appendChild(content);
     }
 }
 
