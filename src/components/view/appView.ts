@@ -20,6 +20,14 @@ export class AppView {
         const values: ISource[] = data?.sources ? data?.sources : [];
         this.sources.draw(values);
     }
+
+    public highlightSource(sourceId: string): void {
+        this.sources.setActive(sourceId);
+    }
+
+    public filterSources(query: string): void {
+        this.sources.filter(query);
+    }
 }
 
 export default AppView;
