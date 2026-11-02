@@ -40,3 +40,31 @@ export interface IErrorResponse extends IBaseResponse {
     code: string;
     message: string;
 }
+
+export enum Endpoint {
+    Sources = 'sources',
+    Everything = 'everything',
+}
+
+export enum HttpMethod {
+    GET = 'GET',
+}
+
+export enum StatusCode {
+    Unauthorized = 401,
+    NotFound = 404,
+}
+
+export interface IApiOptions {
+    apiKey: string;
+    sources: string;
+}
+
+export type RequestOptions = Partial<IApiOptions>;
+
+export interface IRequestParams {
+    endpoint: Endpoint;
+    options?: RequestOptions;
+}
+
+export type Callback<T> = (data: T) => void;

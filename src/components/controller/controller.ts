@@ -1,27 +1,30 @@
 import AppLoader from './appLoader';
+import { Callback, Endpoint, IEverythingResponse, ISourcesResponse } from '../../types';
 
 class AppController extends AppLoader {
-    getSources(callback) {
-        super.getResp(
+    public getSources(callback: Callback<ISourcesResponse>): void {
+        super.getResp<ISourcesResponse>(
             {
-                endpoint: 'sources',
+                endpoint: Endpoint.Sources,
             },
             callback
         );
     }
 
-    getNews(e, callback) {
-        let target = e.target;
-        const newsContainer = e.currentTarget;
+    public getNews(e: MouseEvent, callback: Callback<IEverythingResponse>): void {
+        let target: EventTarget | null = e.target;
+        const newsContainer: EventTarget | null = e.currentTarget;
 
-        while (target !== newsContainer) {
+        if (!(newsContainer instanceof HTMLElement)) return;
+
+        while (target instanceof HTMLElement && target !== newsContainer) {
             if (target.classList.contains('source__item')) {
-                const sourceId = target.getAttribute('data-source-id');
-                if (newsContainer.getAttribute('data-source') !== sourceId) {
+                const sourceId: string | null = target.getAttribute('data-source-id');
+                if (sourceId && newsContainer.getAttribute('data-source') !== sourceId) {
                     newsContainer.setAttribute('data-source', sourceId);
-                    super.getResp(
+                    super.getResp<IEverythingResponse>(
                         {
-                            endpoint: 'everything',
+                            endpoint: Endpoint.Everything,
                             options: {
                                 sources: sourceId,
                             },
@@ -31,7 +34,7 @@ class AppController extends AppLoader {
                 }
                 return;
             }
-            target = target.parentNode;
+            target = target.parentElement;
         }
     }
 }
